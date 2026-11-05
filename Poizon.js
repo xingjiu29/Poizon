@@ -58,6 +58,49 @@ function cleanOrderList(data) {
   }
   return removed;
 }
+function clearWordArrays(data) {
+  if (!data || typeof data !== "object") return;
+  const keys = Object.keys(data);
+  for (let i = 0; i < keys.length; i++) {
+    const k = keys[i];
+    const v = data[k];
+    if (!Array.isArray(v) || v.length === 0) continue;
+    const first = v[0];
+    if (first && typeof first === "object" && ("word" in first || "content" in first || "displayQuery" in first)) {
+      data[k] = [];
+    }
+  }
+}
+function cleanOrderCards(mods) {
+  if (!Array.isArray(mods)) return 0;
+  let n = 0;
+  for (let i = 0; i < mods.length; i++) {
+    const m = mods[i];
+    if (!m || m.key !== "order" || !m.data) continue;
+    if (Array.isArray(m.data.cards)) {
+      n += m.data.cards.length;
+      m.data.cards = [];
+    }
+  }
+  return n;
+}
+function cleanLeadTools(mods) {  if (!Array.isArray(mods)) return 0;
+  let n = 0;
+  for (let i = 0; i < mods.length; i++) {
+    const m = mods[i];
+    if (!m || m.key !== "leadTools") continue;
+    const menus = (m.data && m.data.menus) || [];
+    for (let k = 0; k < menus.length; k++) {
+      const menu = menus[k];
+      if (menu && menu.ext && menu.ext.carouselArea) {
+        delete menu.ext.carouselArea;
+        n++;
+        if (Object.keys(menu.ext).length === 0) delete menu.ext;
+      }
+    }
+  }
+  return n;
+}
 if (!body) {
   $done({});
 } else if (/biz-aggregate\/me\/user-index/.test(url)) {
@@ -70,7 +113,9 @@ if (!body) {
     j.data.modules = mods.filter(function (m) {
       return !m || DROP_ME.indexOf(m.key) < 0;
     });
-    console.log("DW me modules " + before + " -> " + j.data.modules.length);
+    const c = cleanLeadTools(j.data.modules);
+    const oc = cleanOrderCards(j.data.modules);
+    console.log("DW me modules " + before + " -> " + j.data.modules.length + ", carousel " + c + " removed, order cards " + oc + " removed");
     $done({ body: JSON.stringify(j) });
   }
 } else if (/identify-discovery\/v1\/discovery\/index/.test(url)) {
@@ -130,6 +175,7 @@ if (!body) {
   if (!j || !j.data) {
     $done({});
   } else {
+    clearWordArrays(j.data);
     j.data.embedWords = [];
     console.log("DW search bg words cleared");
     $done({ body: JSON.stringify(j) });
@@ -139,8 +185,24 @@ if (!body) {
   if (!j || !j.data) {
     $done({});
   } else {
+    clearWordArrays(j.data);
     j.data.list = [];
+    j.data.wantList = [];
+    j.data.llmWantList = [];
+    j.data.backgroundList = [];
+    j.data.requestId = "";
+    j.data.backgroundRequestId = "";
     console.log("DW search guess words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/sns-rec\/v1\/search\/content-tabs/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    const before = (j.data.tabList || []).length;
+    j.data.tabList = [];
+    console.log("DW search tabs " + before + " -> 0");
     $done({ body: JSON.stringify(j) });
   }
 } else if (/sns-rec\/v1\/search\/hotword-list/.test(url)) {
