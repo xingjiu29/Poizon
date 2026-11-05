@@ -23,6 +23,41 @@ function filterTabs(list) {
   });
   return { list: out, removed: removed };
 }
+function stripOrderNoise(node) {
+  if (!node || typeof node !== "object") return;
+  if (Array.isArray(node)) {
+    for (let i = 0; i < node.length; i++) stripOrderNoise(node[i]);
+    return;
+  }
+  delete node.smallFootmark;
+  delete node.recommendProductInfo;
+  delete node.noteDesc;
+  if (node.noteHeader) delete node.noteHeader;
+  if (node.performanceCopywriting) delete node.performanceCopywriting;
+  const keys = Object.keys(node);
+  for (let i = 0; i < keys.length; i++) stripOrderNoise(node[keys[i]]);
+}
+function cleanOrderList(data) {
+  const orders = data && data.orderList;
+  if (!Array.isArray(orders)) return 0;
+  let removed = 0;
+  for (let i = 0; i < orders.length; i++) {
+    const o = orders[i];
+    if (!o) continue;
+    if (Array.isArray(o.commonNoteList)) {
+      const before = o.commonNoteList.length;
+      o.commonNoteList = o.commonNoteList.filter(function (it) {
+        if (!it) return false;
+        if (it.recommendProductInfo) return false;
+        if (it.type === 10) return false;
+        return JSON.stringify(it).indexOf("为你推荐") < 0;
+      });
+      removed += before - o.commonNoteList.length;
+    }
+    stripOrderNoise(o);
+  }
+  return removed;
+}
 if (!body) {
   $done({});
 } else if (/biz-aggregate\/me\/user-index/.test(url)) {
@@ -117,6 +152,42 @@ if (!body) {
     j.data.videoList = [];
     j.data.topicList = [];
     console.log("DW hot words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/search\/lexicon\/v1\/community\/hot_words/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    j.data.searchHotWordList = [];
+    console.log("DW community hot words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/search\/lexicon\/v1\/community\/rank_words/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    j.data.rankList = [];
+    console.log("DW rank words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/sns-dp\/v1\/order\/info-agg/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    delete j.data.freeOrder;
+    console.log("DW order freeOrder removed");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/biz-aggregate\/order\/buyerOrderList\/agg/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    const n = cleanOrderList(j.data);
+    console.log("DW order list cleaned, note removed=" + n);
     $done({ body: JSON.stringify(j) });
   }
 } else {
