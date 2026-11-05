@@ -222,22 +222,19 @@ if (!body) {
     console.log("DW hot words cleared");
     $done({ body: JSON.stringify(j) });
   }
-} else if (/search\/lexicon\/v1\/community\/hot_words/.test(url)) {
+} else if (/search\/lexicon\/v1\//.test(url)) {
   const j = parse(body);
   if (!j || !j.data) {
     $done({});
   } else {
-    j.data.searchHotWordList = [];
-    console.log("DW community hot words cleared");
-    $done({ body: JSON.stringify(j) });
-  }
-} else if (/search\/lexicon\/v1\/community\/rank_words/.test(url)) {
-  const j = parse(body);
-  if (!j || !j.data) {
-    $done({});
-  } else {
+    clearWordArrays(j.data);
     j.data.rankList = [];
-    console.log("DW rank words cleared");
+    j.data.searchHotWordList = [];
+    j.data.embedWords = [];
+    j.data.outWords = [];
+    j.data.requestId = "";
+    j.data.request_id = "";
+    console.log("DW lexicon words cleared: " + url.split("?")[0].split("/").pop());
     $done({ body: JSON.stringify(j) });
   }
 } else if (/sns-dp\/v1\/order\/info-agg/.test(url)) {
