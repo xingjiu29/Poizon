@@ -1,13 +1,27 @@
 const url = $request.url;
 const body = $response.body;
-const DROP_ME = ["wallet", "merchant", "discountCoupon", "toolBox"];
+const DROP_ME = ["creatorCenter", "wallet", "merchant", "discountCoupon", "toolBox"];
 const DROP_DISCOVERY = [5, 6, 8, 9];
+const DROP_TAB_NAME = /运营频道|玉龙出场/;
 function parse(text) {
   try {
     return JSON.parse(text);
   } catch (e) {
     return null;
   }
+}
+function filterTabs(list) {
+  if (!Array.isArray(list)) return { list: list, removed: 0 };
+  let removed = 0;
+  const out = list.filter(function (t) {
+    if (!t) return true;
+    if (t.cType === 2 || DROP_TAB_NAME.test(String(t.name || ""))) {
+      removed++;
+      return false;
+    }
+    return true;
+  });
+  return { list: out, removed: removed };
 }
 if (!body) {
   $done({});
@@ -45,6 +59,22 @@ if (!body) {
     }
     j.data.groups = out;
     console.log("DW discovery groups " + before + " -> " + out.length);
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/sns-rec\/v1\/du-tab/.test(url)) {
+  const j = parse(body);
+  const d = j && j.data;
+  if (!d) {
+    $done({});
+  } else {
+    let removed = 0;
+    const a = filterTabs(d.second);
+    d.second = a.list;
+    removed += a.removed;
+    const b = filterTabs(d.secondMoreV2);
+    d.secondMoreV2 = b.list;
+    removed += b.removed;
+    console.log("DW du-tab removed=" + removed);
     $done({ body: JSON.stringify(j) });
   }
 } else {
