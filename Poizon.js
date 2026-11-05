@@ -77,6 +77,48 @@ if (!body) {
     console.log("DW du-tab removed=" + removed);
     $done({ body: JSON.stringify(j) });
   }
+} else if (/purchase-tab\/list/.test(url)) {
+  const j = parse(body);
+  const list = j && j.data;
+  if (!Array.isArray(list)) {
+    $done({});
+  } else {
+    const before = list.length;
+    j.data = list.filter(function (t) {
+      return !t || t.tabType !== 1;
+    });
+    console.log("DW purchase tabs " + before + " -> " + j.data.length);
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/search\/lexicon\/v3\/background_words/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    j.data.embedWords = [];
+    console.log("DW search bg words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/sns-rec\/v1\/search\/word-skip\/new-list/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    j.data.list = [];
+    console.log("DW search guess words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
+} else if (/sns-rec\/v1\/search\/hotword-list/.test(url)) {
+  const j = parse(body);
+  if (!j || !j.data) {
+    $done({});
+  } else {
+    j.data.list = [];
+    j.data.videoList = [];
+    j.data.topicList = [];
+    console.log("DW hot words cleared");
+    $done({ body: JSON.stringify(j) });
+  }
 } else {
   $done({});
 }
