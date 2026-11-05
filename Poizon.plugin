@@ -1,9 +1,10 @@
 #!name=得物去广告
-#!desc=移除「我的」页创作中心/钱包/卖家入口/省钱神券/工具箱、「探索」页鉴别服务/玩一玩/买卖闲置/得物月付、「得物」页顶部玉龙出场频道 tab、「购买」页顶部11.11 tab、搜索词联想、猜你想搜、热搜榜
+#!desc=移除「我的」页创作中心/钱包/卖家入口/省钱神券/工具箱、「探索」页鉴别服务/玩一玩/买卖闲置/得物月付、「得物」页顶部玉龙出场频道 tab、「购买」页顶部11.11 tab、搜索词联想、猜你想搜、热搜榜、评价页顶部去晒单
 #!author=杏九
+#!icon=https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/6f/9d/bc/6f9dbc7d-695e-f1ba-230d-b6f34b50492d/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg
 #!loon_version = 3.5.3(1014)
 #!tag=去广告
 [Script]
-http-response ^https:\/\/app\.dewu\.com\/(api\/v1\/app\/biz-aggregate\/me\/user-index|identify-discovery\/v1\/discovery\/index|sns-rec\/v1\/du-tab|api\/v1\/app\/index\/ice\/purchase-tab\/list|api\/v1\/app\/search\/lexicon\/v3\/background_words|sns-rec\/v1\/search\/word-skip\/new-list|sns-rec\/v1\/search\/hotword-list) script-path=https://raw.githubusercontent.com/xingjiu29/Poizon/refs/heads/main/Poizon.js?v=3, requires-body=true, timeout=30
+http-response ^https:\/\/app\.dewu\.com\/(api\/v1\/app\/biz-aggregate\/me\/user-index|identify-discovery\/v1\/discovery\/index|sns-rec\/v1\/du-tab|api\/v1\/app\/index\/ice\/purchase-tab\/list|api\/v1\/app\/search\/lexicon\/v3\/background_words|api\/v1\/app\/search\/lexicon\/v1\/community\/hot_words|api\/v1\/app\/search\/lexicon\/v1\/community\/rank_words|sns-rec\/v1\/search\/word-skip\/new-list|sns-rec\/v1\/search\/hotword-list|sns-dp\/v1\/order\/info-agg|api\/v1\/app\/biz-aggregate\/order\/buyerOrderList\/agg) script-path=https://raw.githubusercontent.com/xingjiu29/Poizon/refs/heads/main/Poizon.js?v=4, requires-body=true, timeout=30
 [MitM]
 hostname = %APPEND% app.dewu.com
