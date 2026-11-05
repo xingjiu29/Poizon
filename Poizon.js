@@ -3,6 +3,7 @@ const body = $response.body;
 const DROP_ME = ["creatorCenter", "wallet", "merchant", "discountCoupon", "toolBox"];
 const DROP_DISCOVERY = [5, 6, 8, 9];
 const DROP_TAB_NAME = /运营频道|玉龙出场/;
+const DROP_TABS = ["tagChanllenge", "tab_video_new"];
 function parse(text) {
   try {
     return JSON.parse(text);
@@ -15,6 +16,11 @@ function filterTabs(list) {
   let removed = 0;
   const out = list.filter(function (t) {
     if (!t) return true;
+    const id = String(t.cId);
+    if (DROP_TABS.indexOf(id) >= 0) {
+      removed++;
+      return false;
+    }
     if (t.cType === 2 || DROP_TAB_NAME.test(String(t.name || ""))) {
       removed++;
       return false;
