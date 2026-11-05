@@ -1,9 +1,9 @@
 #!name=得物去广告
-#!desc=移除「我的」页创作中心/钱包/卖家入口/省钱神券/工具箱、「探索」页鉴别服务/玩一玩/买卖闲置/得物月付、「得物」页顶部玉龙出场频道 tab
+#!desc=移除「我的」页创作中心/钱包/卖家入口/省钱神券/工具箱、「探索」页鉴别服务/玩一玩/买卖闲置/得物月付、「得物」页顶部玉龙出场频道 tab、「购买」页顶部11.11 tab、搜索词联想、猜你想搜、热搜榜
 #!author=杏九
 #!loon_version = 3.5.3(1014)
 #!tag=去广告
 [Script]
-http-response ^https:\/\/app\.dewu\.com\/(api\/v1\/app\/biz-aggregate\/me\/user-index|identify-discovery\/v1\/discovery\/index|sns-rec\/v1\/du-tab) script-path=https://raw.githubusercontent.com/xingjiu29/Poizon/refs/heads/main/Poizon.js?v=2, requires-body=true, timeout=30
+http-response ^https:\/\/app\.dewu\.com\/(api\/v1\/app\/biz-aggregate\/me\/user-index|identify-discovery\/v1\/discovery\/index|sns-rec\/v1\/du-tab|api\/v1\/app\/index\/ice\/purchase-tab\/list|api\/v1\/app\/search\/lexicon\/v3\/background_words|sns-rec\/v1\/search\/word-skip\/new-list|sns-rec\/v1\/search\/hotword-list) script-path=https://raw.githubusercontent.com/xingjiu29/Poizon/refs/heads/main/Poizon.js?v=3, requires-body=true, timeout=30
 [MitM]
 hostname = %APPEND% app.dewu.com
