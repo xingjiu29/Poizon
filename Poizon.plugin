@@ -5,13 +5,13 @@
 #!loon_version = 3.5.3(1014)
 #!tag=去广告
 [Rewrite]
-^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/adv\/launch\/preloadLaunchScreenAdv - reject_dict(200)
-^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/adv\/getHomePopAdv - reject_dict(200)
-^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/homePage\/getMyTabPopAdv - reject_dict(200)
-^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/ - reject_dict(200)
-^https?:\/\/app\.dewu\.com\/hacking-newbie\/v1\/common\/home\/new-activate\/adv\/layer - reject_dict(200)
-^https?:\/\/app\.dewu\.com\/api\/v1\/app\/userConfig-biz\/popUpWindowApi\/queryPopUpWindows - reject_dict(200)
-^https?:\/\/app\.dewu\.com\/hacking-activity\/v1\/landing-page\/adv-bar - reject_dict(200)
+^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/adv\/launch\/preloadLaunchScreenAdv - reject-dict
+^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/adv\/getHomePopAdv - reject-dict
+^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/homePage\/getMyTabPopAdv - reject-dict
+^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/ - reject-dict
+^https?:\/\/app\.dewu\.com\/hacking-newbie\/v1\/common\/home\/new-activate\/adv\/layer - reject-dict
+^https?:\/\/app\.dewu\.com\/api\/v1\/app\/userConfig-biz\/popUpWindowApi\/queryPopUpWindows - reject-dict
+^https?:\/\/app\.dewu\.com\/hacking-activity\/v1\/landing-page\/adv-bar - reject-dict
 [Script]
 http-response ^https:\/\/app\.dewu\.com\/(api\/v1\/app\/biz-aggregate\/me\/user-index|identify-discovery\/v1\/discovery\/index|sns-rec\/v1\/du-tab|api\/v1\/app\/index\/ice\/purchase-tab\/list|api\/v1\/app\/search\/lexicon\/v1\/|api\/v1\/app\/search\/lexicon\/v3\/background_words|sns-rec\/v1\/search\/word-skip\/new-list|sns-rec\/v1\/search\/hotword-list|sns-rec\/v1\/search\/content-tabs|sns-dp\/v1\/order\/info-agg|api\/v1\/app\/biz-aggregate\/order\/buyerOrderList\/agg) script-path=https://raw.githubusercontent.com/xingjiu29/Poizon/refs/heads/main/Poizon.js?v=11, requires-body=true, timeout=30
 [MitM]
