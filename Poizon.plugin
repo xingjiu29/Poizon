@@ -4,6 +4,9 @@
 #!icon=https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/6f/9d/bc/6f9dbc7d-695e-f1ba-230d-b6f34b50492d/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg
 #!loon_version = 3.5.3(1014)
 #!tag=去广告
+[Rule]
+DOMAIN-SUFFIX,dewu.com,PROXY
+DOMAIN-SUFFIX,poizon.com,PROXY
 [Rewrite]
 ^https?:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/ - reject-dict
 ^https?:\/\/app\.dewu\.com\/hacking-newbie\/v1\/common\/home\/new-activate\/adv\/layer - reject-dict
