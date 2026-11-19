@@ -17,4 +17,4 @@ DOMAIN-SUFFIX,poizon.com,PROXY
 [Script]
 http-response ^https?:\/\/(?:[a-z0-9-]+\.)*(?:dewu|poizon)\.com\/(identify-discovery\/v1\/discovery\/index|api\/v1\/app\/index\/ice\/purchase-tab\/list|sns-rec\/v1\/(search\/word-skip\/new-list|du-tab)|api\/v1\/app\/biz-aggregate\/me\/user-index|api\/v1\/app\/search\/lexicon\/v3\/background_words) script-path=https://raw.githubusercontent.com/xingjiu29/Poizon/main/Poizon.js?v=2, requires-body=true, timeout=30
 [MitM]
-hostname = %APPEND% app.dewu.com
+hostname = app.dewu.com
